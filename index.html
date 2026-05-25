@@ -216,13 +216,103 @@
   .topbar nav a:hover::after{ transform: scaleX(0.4); transform-origin: left center; }
   .topbar nav a.is-active{ color: var(--ink); }
   .topbar nav a.is-active::after{ transform: scaleX(1); }
-  @media (max-width: 760px){
-    .topbar nav{ gap: 18px; font-size: 12px; }
+  /* ---------- Burger menu (mobile / narrow tablet) ----------
+     The burger sits at the right edge of the topbar. On desktop it's
+     hidden; below 820px (covers most tablets in portrait and all phones)
+     the inline nav links are pulled out of the flex row and re-laid as a
+     full-width dropdown panel directly beneath the topbar shell.
+     The dropdown is editorial — hairline-separated rows, generous touch
+     targets, no shadow trickery. */
+  .menu-btn{
+    display: none;
+    background: transparent;
+    border: 0;
+    padding: 8px;
+    margin-right: -8px;
+    cursor: pointer;
+    color: var(--ink);
+    -webkit-tap-highlight-color: transparent;
+    line-height: 0;
   }
-  @media (max-width: 560px){
-    /* Hide secondary anchors on narrow viewports; keep Contact + wordmark. */
-    .topbar nav a.nav-secondary{ display: none; }
-    .topbar nav{ gap: 16px; }
+  .menu-btn .bars{
+    position: relative;
+    display: block;
+    width: 22px;
+    height: 14px;
+  }
+  .menu-btn .bars::before,
+  .menu-btn .bars::after,
+  .menu-btn .bars span{
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 1.5px;
+    background: currentColor;
+    transition:
+      transform 280ms var(--ease-standard),
+      top 280ms var(--ease-standard),
+      opacity 180ms var(--ease-standard);
+  }
+  .menu-btn .bars::before{ top: 0; }
+  .menu-btn .bars span{ top: 50%; transform: translateY(-50%); display: block; }
+  .menu-btn .bars::after{ bottom: 0; }
+  .menu-btn[aria-expanded="true"] .bars::before{ top: 50%; transform: translateY(-50%) rotate(45deg); }
+  .menu-btn[aria-expanded="true"] .bars::after{ bottom: 50%; transform: translateY(50%) rotate(-45deg); }
+  .menu-btn[aria-expanded="true"] .bars span{ opacity: 0; }
+
+  @media (max-width: 820px){
+    .menu-btn{ display: inline-flex; align-items: center; }
+    .topbar nav{
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      display: block;
+      gap: 0;
+      background: #ffffff;
+      padding: 0 var(--rail-x);
+      max-width: 1440px;
+      margin: 0 auto;
+      max-height: 0;
+      opacity: 0;
+      overflow: hidden;
+      pointer-events: none;
+      transition:
+        max-height 360ms var(--ease-standard),
+        opacity 240ms var(--ease-standard),
+        border-color 240ms var(--ease-standard);
+      border-bottom: 1px solid transparent;
+    }
+    .topbar-shell.is-menu-open .topbar nav{
+      max-height: 70vh;
+      opacity: 1;
+      pointer-events: auto;
+      border-bottom-color: var(--rule-light);
+      box-shadow: 0 18px 24px -22px rgba(15,23,24,0.18);
+    }
+    .topbar-shell.is-menu-open{ background: #ffffff; }
+    .topbar nav a{
+      display: flex;
+      align-items: center;
+      padding: 18px 0;
+      font-size: 16px;
+      letter-spacing: 0.01em;
+      color: var(--fg-on-light-1);
+      border-top: 1px solid var(--rule-light);
+    }
+    .topbar nav a:first-of-type{ border-top: 0; }
+    .topbar nav a::after{ display: none; }
+    .topbar nav a.is-active{ color: var(--sage-deep); }
+    .topbar nav a.is-active::before{
+      content: "";
+      display: inline-block;
+      width: 18px;
+      height: 1px;
+      background: var(--sage);
+      margin-right: 14px;
+      vertical-align: middle;
+    }
   }
 
   /* ---------- Hero (ink) ---------- */
@@ -1446,6 +1536,9 @@
         <a href="#writing" data-jump="writing">Writing</a>
         <a href="#contact" data-jump="contact">Contact</a>
       </nav>
+      <button type="button" class="menu-btn" id="menu-btn" aria-controls="jump-nav" aria-expanded="false" aria-label="Open menu">
+        <span class="bars" aria-hidden="true"><span></span></span>
+      </button>
     </header>
   </div>
 </div>
@@ -1841,6 +1934,57 @@
     updateShell();
     window.addEventListener('scroll', updateShell, { passive: true });
     window.addEventListener('resize', updateShell);
+
+    // ---- Burger menu (mobile / narrow tablet)
+    var menuBtn = document.getElementById('menu-btn');
+    var MOBILE_QUERY = window.matchMedia('(max-width: 820px)');
+
+    function setMenuOpen(open){
+      shell.classList.toggle('is-menu-open', open);
+      if(menuBtn){
+        menuBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        menuBtn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      }
+      updateShell();
+    }
+
+    if(menuBtn){
+      menuBtn.addEventListener('click', function(e){
+        e.stopPropagation();
+        var isOpen = shell.classList.contains('is-menu-open');
+        setMenuOpen(!isOpen);
+      });
+
+      links.forEach(function(a){
+        a.addEventListener('click', function(){
+          if(shell.classList.contains('is-menu-open')) setMenuOpen(false);
+        });
+      });
+
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' && shell.classList.contains('is-menu-open')){
+          setMenuOpen(false);
+          menuBtn.focus();
+        }
+      });
+
+      document.addEventListener('click', function(e){
+        if(!shell.classList.contains('is-menu-open')) return;
+        if(shell.contains(e.target)) return;
+        setMenuOpen(false);
+      });
+
+      function onBreakpointChange(){
+        if(!MOBILE_QUERY.matches && shell.classList.contains('is-menu-open')){
+          setMenuOpen(false);
+        }
+      }
+      if(MOBILE_QUERY.addEventListener){
+        MOBILE_QUERY.addEventListener('change', onBreakpointChange);
+      } else if(MOBILE_QUERY.addListener){
+        MOBILE_QUERY.addListener(onBreakpointChange); // Safari < 14
+      }
+    }
 
     // ---- Active link: track which section is most prominently in view
     // Some sections aren't directly in the nav but conceptually belong
