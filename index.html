@@ -370,7 +370,7 @@
     line-height: 1.55;
     color: var(--fg-on-dark-2);
     margin: clamp(32px, 4vw, 48px) 0 0;
-    max-width: 48ch;
+    max-width: 68ch;
   }
   .hero .hero-ctas{
     margin-top: clamp(56px, 7vw, 88px);
@@ -597,9 +597,9 @@
     font-family: var(--font-serif);
     font-weight: 400;
     font-optical-sizing: auto;
-    font-variation-settings: "opsz" 40;
-    font-size: clamp(26px, 3vw, 38px);
-    line-height: 1.28;
+    font-variation-settings: "opsz" 44;
+    font-size: clamp(30px, 3.6vw, 46px);
+    line-height: 1.24;
     letter-spacing: -0.016em;
     color: var(--ink);
     margin: 0;
@@ -637,43 +637,51 @@
     .shifts-heading{ font-size: clamp(28px, 7.2vw, 36px); line-height: 1.1; }
   }
 
-  /* ---------- 4.2b "What this work makes possible" — 4 from-to shifts ----------
-     2×2 editorial grid. Each card carries:
-     · a quiet numeric marker (01–04) in the top-right corner
-     · a stacked from → to statement (small italic muted "from",
-       large sage arrow, dominant serif "to" — the typographic anchor)
-     · two short prose paragraphs, no eyebrows (problem → possibility)
-     · a quietly-labeled "What I help build" list, bottom-aligned
-     Hairlines between columns and rows.
-     Responsive: 2 → 1 columns. */
+  /* Lead paragraph sitting beneath the shifts section heading,
+     introducing the four shifts at standard body scale. */
+  .shifts-lead{
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: clamp(17px, 1.5vw, 20px);
+    line-height: 1.6;
+    color: var(--fg-on-light-1);
+    margin: clamp(20px, 2.2vw, 28px) 0 0;
+    max-width: 64ch;
+    text-wrap: pretty;
+  }
+
+  /* 4-column shifts row. Each card carries a stacked from → to
+     statement (small upright serif "from", sage arrow, dominant
+     serif "to") and a single short body line. Hairlines between
+     columns and at top + bottom of the row. */
   .shifts{
     margin-top: clamp(40px, 5vw, 56px);
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(4, 1fr);
     border-top: 1px solid var(--rule-light);
     border-bottom: 1px solid var(--rule-light);
   }
   .shift{
     position: relative;
-    padding: clamp(36px, 3.4vw, 56px) clamp(28px, 2.8vw, 44px) clamp(36px, 3.4vw, 48px);
+    padding: clamp(28px, 2.4vw, 40px) clamp(20px, 1.8vw, 28px);
     display: flex;
     flex-direction: column;
-    gap: clamp(20px, 2vw, 28px);
+    gap: clamp(20px, 1.8vw, 28px);
+    border-right: 1px solid var(--rule-light);
   }
-  .shift:nth-child(odd){ border-right: 1px solid var(--rule-light); }
-  .shift:nth-child(-n+2){ border-bottom: 1px solid var(--rule-light); }
+  .shift:last-child{ border-right: 0; }
   .shift-statement{
     display: flex;
     flex-direction: column;
-    gap: clamp(10px, 1vw, 14px);
+    gap: clamp(8px, 0.8vw, 12px);
   }
   .ft-from-text{
     font-family: var(--font-serif);
     font-weight: 400;
     font-optical-sizing: auto;
     font-variation-settings: "opsz" 24;
-    font-size: clamp(20px, 1.9vw, 26px);
-    line-height: 1.18;
+    font-size: clamp(19px, 1.6vw, 23px);
+    line-height: 1.2;
     letter-spacing: -0.012em;
     color: var(--fg-on-light-2);
     margin: 0;
@@ -682,86 +690,84 @@
   .ft-arrow{
     font-family: var(--font-serif);
     font-weight: 400;
-    font-size: clamp(26px, 2.4vw, 32px);
+    font-size: clamp(22px, 1.8vw, 26px);
     line-height: 1;
     color: var(--sage);
     display: inline-block;
-    margin: clamp(2px, 0.4vw, 6px) 0;
+    margin: clamp(2px, 0.3vw, 4px) 0;
   }
   .ft-to-text{
     font-family: var(--font-serif);
     font-weight: 600;
     font-optical-sizing: auto;
-    font-variation-settings: "opsz" 36;
-    font-size: clamp(30px, 3vw, 40px);
-    line-height: 1.08;
-    letter-spacing: -0.022em;
+    font-variation-settings: "opsz" 32;
+    font-size: clamp(22px, 1.95vw, 30px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
     color: var(--ink);
     margin: 0;
     text-wrap: balance;
   }
-  .shift-rule{
-    border: 0;
-    border-top: 1px solid var(--rule-light);
-    margin: clamp(4px, 0.6vw, 8px) 0 clamp(2px, 0.4vw, 4px);
-  }
-  .shift-body{
+  .shift-line{
     font-family: var(--font-sans);
     font-weight: 300;
     font-size: 17px;
-    line-height: 1.65;
+    line-height: 1.6;
     color: var(--fg-on-light-1);
-    display: flex;
-    flex-direction: column;
-    gap: clamp(14px, 1.3vw, 18px);
+    margin: 0;
+    text-wrap: pretty;
   }
-  .shift-body p{ margin: 0; }
-  .shift-body strong{ font-weight: 600; color: var(--ink); }
-  .shift-build .b-label{
-    font-family: var(--font-sans);
-    font-style: normal;
-    font-weight: 700;
-    font-size: 10px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--sage-deep);
-    display: block;
-    margin-bottom: 6px;
-    line-height: 1;
-    opacity: 0.85;
+
+  /* "Engagements typically involve" — a 2-column editorial list
+     of capabilities, set in serif at moderate size with hairlines
+     above each item. */
+  .engagements{
+    margin-top: clamp(48px, 5.6vw, 72px);
   }
-  .shift-build{
-    margin-top: auto;
-    padding-top: clamp(18px, 1.8vw, 24px);
-    border-top: 1px solid var(--rule-light);
-    font-family: var(--font-sans);
-    font-style: normal;
-    font-weight: 300;
-    font-size: 17px;
-    line-height: 1.65;
-    color: var(--fg-on-light-1);
+  .engagements .e-heading{
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 28;
+    font-size: clamp(22px, 2vw, 28px);
+    line-height: 1.2;
+    letter-spacing: -0.014em;
+    color: var(--ink);
+    margin: 0 0 clamp(20px, 2vw, 28px);
+    text-wrap: balance;
   }
-  .shift-build ul{
+  .engagement-list{
     list-style: none;
-    margin: 12px 0 0;
+    margin: 0;
     padding: 0;
+    column-count: 2;
+    column-gap: clamp(48px, 6vw, 96px);
   }
-  .shift-build li{
-    display: block;
-  }
-  .shift-build li + li{
-    margin-top: 8px;
+  .engagement-list li{
+    break-inside: avoid;
+    padding: clamp(14px, 1.3vw, 18px) 0;
+    border-top: 1px solid var(--rule-light);
+    font-family: var(--font-sans);
+    font-weight: 300;
+    font-size: clamp(18px, 1.45vw, 21px);
+    line-height: 1.35;
+    letter-spacing: -0.005em;
+    color: var(--ink);
+    text-wrap: balance;
   }
 
   @media (max-width: 1100px){
+    .shifts{ grid-template-columns: repeat(2, 1fr); }
     .shift{ padding: clamp(28px, 4vw, 40px) clamp(24px, 3.5vw, 32px); }
-    .ft-to-text{ font-size: clamp(26px, 3.6vw, 34px); }
+    .shift:nth-child(2n){ border-right: 0; }
+    .shift:nth-child(-n+2){ border-bottom: 1px solid var(--rule-light); }
+    .ft-to-text{ font-size: clamp(26px, 3.6vw, 32px); }
   }
   @media (max-width: 640px){
     .shifts{ grid-template-columns: 1fr; }
     .shift{ border-right: 0 !important; border-bottom: 1px solid var(--rule-light); }
-    .shift:nth-child(odd){ border-right: 0; }
     .shift:last-child{ border-bottom: 0; }
+    .engagement-list{ column-count: 1; }
   }
 
   /* ---------- 4.3b Selected work ----------
@@ -1549,10 +1555,10 @@
   <div class="hero-wrap" id="hero">
     <section class="hero" data-screen-label="01 Hero" aria-labelledby="hero-line">
       <h1 id="hero-line" class="hero-line">
-        Advising leaders working on the human and organizational side of the <span class="accent">AI transition</span>.
+        Advisor for leaders working on the human and organizational side of the <span class="accent">AI transition</span>.
       </h1>
       <p class="hero-support">
-        Strategy, governance, operating models, and the organizational capacity behind AI adoption.
+        Practice spans government, enterprise, healthcare, and mission-driven organizations. Previously held a leadership role at Accenture Canada focused on large enterprise and government transformation initiatives, after co-founding and co-leading one of Canada's leading service design and innovation consultancies for a decade.
       </p>
       <div class="hero-ctas">
         <a class="btn-primary" href="https://calendly.com/judelman" target="_blank" rel="noopener">Book a call <span class="arr">→</span></a>
@@ -1566,13 +1572,14 @@
     <div class="section-head">
       <div class="thesis-block">
         <p class="thesis">
-          While organizations are focused on AI tools and productivity gains, less attention is being paid to how organizations themselves need to adapt: how decisions get made, how teams coordinate, how responsibilities are shared, and how learning happens across the organization. That's where AI adoption often gets stuck, and it's where I work.
+          AI adoption often gets stuck in how organizations themselves need to adapt: how decisions get made, how teams coordinate, how responsibilities are shared, and how learning happens across the organization. That's where I work.
         </p>
       </div>
 
       <div class="shifts-intro" id="shifts">
         <hr class="section-rule"/>
-        <h2 class="shifts-heading">The work focuses on four shifts</h2>
+        <h2 class="shifts-heading">What AI actually asks of organizations</h2>
+        <p class="shifts-lead">Most AI use right now is personal: people drafting faster, summarizing more, searching better. But changing how an organization actually runs takes work at a different level.</p>
       </div>
 
       <div class="shifts" role="list">
@@ -1582,20 +1589,7 @@
             <span class="ft-arrow" aria-hidden="true">→</span>
             <p class="ft-to-text">Coordinated organizational learning</p>
           </div>
-          <hr class="shift-rule"/>
-          <div class="shift-body">
-            <p><strong>Today,</strong> teams are experimenting with AI on their own. Learning stays local, leadership has limited visibility, and the same experiments get repeated in different corners of the organization.</p>
-            <p><strong>When this shifts,</strong> experimentation becomes visible and connected. Teams learn from each other. Leadership can see where momentum, risk, and opportunity are emerging.</p>
-          </div>
-          <div class="shift-build">
-            <span class="b-label">What I help build</span>
-            <ul>
-              <li>Shared experimentation practices</li>
-              <li>Cross-team coordination</li>
-              <li>Shared learning routines</li>
-              <li>Lightweight experimentation governance</li>
-            </ul>
-          </div>
+          <p class="shift-line">Teams stop running the same experiments in parallel. What one team learns gets shared with others.</p>
         </article>
 
         <article class="shift" role="listitem">
@@ -1604,20 +1598,7 @@
             <span class="ft-arrow" aria-hidden="true">→</span>
             <p class="ft-to-text">Workflow and operating model redesign</p>
           </div>
-          <hr class="shift-rule"/>
-          <div class="shift-body">
-            <p><strong>Today,</strong> AI is mostly being used for individual productivity. People draft, summarize, and search faster, but the workflows, approvals, and roles around the work stay the same.</p>
-            <p><strong>When this shifts,</strong> organizations redesign how work happens: who owns what, what AI supports, where judgment lives, and how exceptions get handled.</p>
-          </div>
-          <div class="shift-build">
-            <span class="b-label">What I help build</span>
-            <ul>
-              <li>Workflow redesign</li>
-              <li>Clearer ownership structures</li>
-              <li>Human-AI ways of working</li>
-              <li>Service and workflow adaptation</li>
-            </ul>
-          </div>
+          <p class="shift-line">The work itself gets redesigned: who does what, where AI fits in, and how decisions get made.</p>
         </article>
 
         <article class="shift" role="listitem">
@@ -1626,20 +1607,7 @@
             <span class="ft-arrow" aria-hidden="true">→</span>
             <p class="ft-to-text">Adaptive operating practices</p>
           </div>
-          <hr class="shift-rule"/>
-          <div class="shift-body">
-            <p><strong>Today,</strong> governance emerges reactively. Teams are not sure what is allowed. Approvals become bottlenecks. Policies lag behind actual usage.</p>
-            <p><strong>When this shifts,</strong> practical operating practices let experimentation happen while keeping risk proportionate to context. Governance becomes part of day-to-day decision-making instead of living only in policy documents.</p>
-          </div>
-          <div class="shift-build">
-            <span class="b-label">What I help build</span>
-            <ul>
-              <li>Practical governance models</li>
-              <li>Experimentation guardrails</li>
-              <li>Review and escalation practices</li>
-              <li>Manager enablement</li>
-            </ul>
-          </div>
+          <p class="shift-line">Governance moves out of policy documents and into day-to-day decisions.</p>
         </article>
 
         <article class="shift" role="listitem">
@@ -1648,21 +1616,20 @@
             <span class="ft-arrow" aria-hidden="true">→</span>
             <p class="ft-to-text">Aligned organizational direction</p>
           </div>
-          <hr class="shift-rule"/>
-          <div class="shift-body">
-            <p><strong>Today,</strong> pressure to move on AI is high, but leadership priorities, governance, and what is happening on the ground are not connected. Strategy gets set in one room while experimentation happens in others.</p>
-            <p><strong>When this shifts,</strong> strategy, governance, experimentation, and day-to-day work begin to reinforce each other. Priorities clarify, trade-offs become explicit, and leadership and teams move in the same direction.</p>
-          </div>
-          <div class="shift-build">
-            <span class="b-label">What I help build</span>
-            <ul>
-              <li>Strategic alignment</li>
-              <li>Transformation coordination</li>
-              <li>Shared visibility across initiatives</li>
-              <li>Operational feedback loops</li>
-            </ul>
-          </div>
+          <p class="shift-line">Leadership priorities, governance, and the work on the ground start moving in the same direction.</p>
         </article>
+      </div>
+
+      <div class="engagements" aria-labelledby="engagements-label">
+        <h3 class="e-heading" id="engagements-label">Engagements typically involve</h3>
+        <ul class="engagement-list">
+          <li>Workflow and operating model redesign</li>
+          <li>Practical governance and experimentation guardrails</li>
+          <li>Pilot and experimentation design</li>
+          <li>Cross-team coordination and shared learning</li>
+          <li>Leadership and manager alignment</li>
+          <li>Strategy and operating model workshops</li>
+        </ul>
       </div>
     </div>
   </section>
