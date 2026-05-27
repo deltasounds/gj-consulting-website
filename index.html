@@ -935,8 +935,8 @@
     .canvas-band.b-focus,
     .canvas-band.b-adapt,
     .canvas-band.b-enable{ grid-template-columns: 1fr; }
-    .band-label{ border-right: 0; border-bottom: 1px solid var(--rule-light); min-height: auto; padding: 20px 0; }
-    .c-block{ border-right: 0; border-bottom: 1px solid var(--rule-light); min-height: auto; padding: 20px 0; }
+    .band-label{ border-right: 0; border-bottom: 1px solid var(--rule-light); min-height: auto; padding: 22px 18px; }
+    .c-block{ border-right: 0; border-bottom: 1px solid var(--rule-light); min-height: auto; padding: 22px 18px; }
     .c-block:last-child{ border-bottom: 0; }
   }
 
@@ -1346,7 +1346,7 @@
 
   @media (max-width: 920px){
     .bio-grid{ grid-template-columns: 1fr; row-gap: clamp(32px, 5vw, 48px); }
-    .portrait{ max-width: 140px; }
+    .portrait{ max-width: 360px; }
   }
 
   /* Mobile: relax section heading max-widths so they don't preserve
@@ -1355,8 +1355,8 @@
   @media (max-width: 720px){
     h2.cs-heading{
       max-width: none;
-      font-size: clamp(28px, 7.2vw, 36px);
-      line-height: 1.1;
+      font-size: clamp(34px, 8.6vw, 44px);
+      line-height: 1.08;
     }
     .closing-invite{
       max-width: none;
@@ -1892,8 +1892,10 @@
     function findHeading(section){
       if(!section) return null;
       // Prefer the visible section heading (Approach uses .shifts-heading;
-      // every other section uses h2.cs-heading inside .section-head).
-      return section.querySelector('.cs-heading, .shifts-heading, h1, h2');
+      // the closing section has no h2 — its first visible content is
+      // the `.closing-invite` line, which should land in the same spot
+      // a heading would.
+      return section.querySelector('.cs-heading, .shifts-heading, .closing-invite, h1, h2');
     }
     function jumpTo(id, opts){
       if(id === 'top'){
@@ -2013,6 +2015,21 @@
       entries.forEach(function(e){
         ratios[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0;
       });
+      // Top-of-page: if the hero is still the dominant block in view
+      // (i.e. the reader hasn't moved past it yet), no nav item should
+      // be highlighted. This matches reader intent on first load — the
+      // nav is a wayfinding tool, not a "you are here" claim about the
+      // hero band, which has no corresponding nav entry.
+      var heroEl = document.getElementById('hero');
+      if(heroEl){
+        var heroBottom = heroEl.getBoundingClientRect().bottom;
+        var navH = (shell.offsetHeight || 64) + 16;
+        if(heroBottom > navH){
+          setActive('');
+          return;
+        }
+      }
+
       // Pick the section with the highest ratio. Fall back to the last
       // section above the viewport when nothing meets the threshold
       // (e.g. between two short sections on a tall screen).
