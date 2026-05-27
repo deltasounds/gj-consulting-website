@@ -887,22 +887,22 @@
   .band-label .label-name{
     font-family: var(--font-sans);
     font-weight: 700;
-    font-size: 13px;
+    font-size: clamp(12px, 0.95vw, 14px);
     line-height: 1.2;
-    letter-spacing: 0.14em;
+    letter-spacing: 0.18em;
     text-transform: uppercase;
     color: var(--ink);
-    margin-top: 8px; /* optical top-align with the serif area title in the next column */
+    margin-top: 6px; /* optical top-align with the serif area title in the next column */
   }
   .band-label .label-tag{
     font-family: var(--font-sans);
-    font-weight: 400;
-    font-size: 11px;
-    letter-spacing: 0.18em;
+    font-weight: 300;
+    font-size: 14px;
+    letter-spacing: 0;
     color: var(--fg-on-light-2);
-    line-height: 1;
-    opacity: 0.7;
-    margin-top: 2px;
+    line-height: 1.45;
+    margin-top: 10px;
+    text-wrap: pretty;
   }
 
   .c-block{
@@ -911,7 +911,7 @@
     display: flex;
     flex-direction: column;
     gap: 8px;
-    min-height: 168px;
+    min-height: 140px;
   }
   .c-block:last-child{ border-right: 0; }
   .c-block .num{
@@ -924,12 +924,14 @@
   }
   .c-block .name{
     font-family: var(--font-serif);
+    font-variation-settings: "opsz" 36;
     font-weight: 600;
-    font-size: 22px;
-    line-height: 1.15;
-    letter-spacing: -0.012em;
+    font-size: clamp(24px, 2.4vw, 32px);
+    line-height: 1.12;
+    letter-spacing: -0.014em;
     color: var(--ink);
-    margin-top: 4px;
+    margin-top: 2px;
+    text-wrap: balance;
   }
   .c-block .desc{
     font-family: var(--font-sans);
@@ -1671,8 +1673,8 @@
             <h3 class="work-title">AI governance, evaluation, and operational oversight</h3>
           </div>
           <div class="work-body">
-            <p>Developed governance and evaluation frameworks for AI-assisted adjudication systems in a high-stakes regulatory environment. The work established clearer ownership, evidence requirements, review practices, and operational oversight structures for responsible AI deployment.</p>
-            <p class="work-partner">Delivered in partnership with Thinking Big.</p>
+            <p>Developed governance and evaluation frameworks for AI-assisted adjudication systems in a high-stakes federal context. Scope covered evaluation methods, decision governance, human oversight, and monitoring across the AI lifecycle. The framework drew on current standards and guidance, including DADM, AIA, NIST AI RMF, ISO/IEC 42001, and OWASP guidance for LLM-enabled systems.</p>
+            <p class="work-partner">Senior advisory lead, in partnership with Thinking Big.</p>
           </div>
         </article>
 
@@ -1683,7 +1685,7 @@
           </div>
           <div class="work-body">
             <p>Led strategic modernization work for a province-wide government service delivery platform. The work clarified future operating models, cross-departmental coordination needs, service integration priorities, and a sequenced transition path leadership could operationalize.</p>
-            <p class="work-partner">Delivered in partnership with Thinking Big.</p>
+            <p class="work-partner">Senior advisory lead, in partnership with Thinking Big.</p>
           </div>
         </article>
 
@@ -1694,7 +1696,7 @@
           </div>
           <div class="work-body">
             <p>Developed governance and prioritization frameworks supporting coordination across digital initiatives and organizational priorities. The work improved intake, evaluation, prioritization, and executive decision-making under constrained organizational capacity.</p>
-            <p class="work-partner">Delivered in partnership with Thinking Big.</p>
+            <p class="work-partner">Senior advisory lead, in partnership with Thinking Big.</p>
           </div>
         </article>
 
@@ -1728,20 +1730,17 @@
 
       <!-- The 8-block Canvas diagram (2 / 4 / 2)
            Band label sits to the left as a marginalia column; blocks fill the row. -->
-      <figure class="canvas-figure" aria-label="The AI Transformation Canvas, eight blocks in three layers">
-        <!-- Band 1: Strategic Focus -->
+      <figure class="canvas-figure" aria-label="The AI Transformation Canvas, eight areas across three layers">
+        <!-- Band 1: Strategy -->
         <div class="canvas-band b-focus">
           <div class="band-label">
-            <div class="label-name">Strategic focus</div>
-            <div class="label-tag">Layer</div>
+            <div class="label-name">Strategy</div>
           </div>
           <div class="c-block">
-            <div class="name">Strategic intent</div>
-            <div class="desc">Why AI, where it fits in the mission, the bets the organization is making.</div>
+            <div class="name">Strategic Priorities</div>
           </div>
           <div class="c-block">
-            <div class="name">Value &amp; outcomes</div>
-            <div class="desc">What success looks like, who it accrues to, how it gets measured.</div>
+            <div class="name">Outcomes &amp; Value</div>
           </div>
         </div>
 
@@ -1749,23 +1748,18 @@
         <div class="canvas-band b-adapt">
           <div class="band-label">
             <div class="label-name">Adaptation</div>
-            <div class="label-tag">Layer</div>
           </div>
           <div class="c-block">
-            <div class="name">Operating model</div>
-            <div class="desc">How decisions get made and how the work actually moves through.</div>
+            <div class="name">Experiments &amp; Evidence</div>
           </div>
           <div class="c-block">
-            <div class="name">Governance &amp; decision rights</div>
-            <div class="desc">Policy, risk, accountability, and the rules of engagement.</div>
+            <div class="name">Governance &amp; Oversight</div>
           </div>
           <div class="c-block">
-            <div class="name">Workflow &amp; practice</div>
-            <div class="desc">How daily work changes when AI sits inside it.</div>
+            <div class="name">Human–AI Workflows</div>
           </div>
           <div class="c-block">
-            <div class="name">Evaluation &amp; learning</div>
-            <div class="desc">How quality is judged in practice and how learning travels.</div>
+            <div class="name">People &amp; Roles</div>
           </div>
         </div>
 
@@ -1773,15 +1767,12 @@
         <div class="canvas-band b-enable">
           <div class="band-label">
             <div class="label-name">Enablement</div>
-            <div class="label-tag">Layer</div>
           </div>
           <div class="c-block">
-            <div class="name">People &amp; capability</div>
-            <div class="desc">Skills, roles, and capacity to use AI well across the organization.</div>
+            <div class="name">Tools, Data &amp; Access</div>
           </div>
           <div class="c-block">
-            <div class="name">Technology &amp; data</div>
-            <div class="desc">Systems, tooling, and data foundations the rest of it depends on.</div>
+            <div class="name">Shared Learning &amp; Coordination</div>
           </div>
         </div>
       </figure>
@@ -1839,7 +1830,7 @@
           <p>I advise organizations on adapting to AI in practice, working independently and assembling small teams and collaborators as needed.</p>
           <p>In 2021 I joined <a href="https://www.accenture.com/ca-en/about/accenture-song-index" target="_blank" rel="noopener">Accenture</a>'s design and product practice leadership team in Canada, working across large enterprise and government transformation initiatives.</p>
           <p>Before that, in 2011 I co-founded <a href="https://www.themoment.is/" target="_blank" rel="noopener">The Moment</a>, one of Canada's leading service design and innovation consultancies, and co-led it for a decade. The work helped establish service design, experience design, and organizational innovation practices across government, healthcare, finance, and telecommunications.</p>
-          <p>I also run <a href="https://www.regenai.earth/" target="_blank" rel="noopener">ReGenAI</a>, a studio exploring ecological and regenerative approaches to AI.</p>
+          <p>I also run <a href="https://www.regenai.earth/" target="_blank" rel="noopener">ReGenAI</a>, a studio exploring ecological and regenerative approaches to AI, with a focus on coordination, stewardship, and long-horizon adaptation.</p>
           <a href="https://www.linkedin.com/in/judelman/" target="_blank" rel="noopener" class="ln-link">Detail on LinkedIn <span class="arr">→</span></a>
         </div>
       </div>
