@@ -1981,6 +1981,7 @@
       if(e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
       if(jumpTo(id)){
         e.preventDefault();
+        lockActive(id === 'top' ? '' : navIdFor(id));
         // Update the URL hash without triggering a native jump.
         try {
           var hash = id === 'top' ? ' ' : '#' + id;
@@ -2067,12 +2068,31 @@
       });
     }
 
+    // Post-jump lock: when the user clicks a nav link, commit the active
+    // state immediately and freeze it for 900ms so that IO threshold
+    // crossings during the smooth scroll can't clobber the explicit intent.
+    // Fixes the Approach link leaving no underline when clicked from the top
+    // (the section is tall so its max ratio stays low and all IO firings
+    // happen while the hero guard is still suppressing the active state).
+    var lockedActiveId = null;
+    var lockTimer = null;
+    function lockActive(id){
+      lockedActiveId = id;
+      setActive(id);
+      if(lockTimer) clearTimeout(lockTimer);
+      lockTimer = setTimeout(function(){
+        lockedActiveId = null;
+        lockTimer = null;
+      }, 900);
+    }
+
     // Map of section.id -> current intersection ratio so we can pick the
     // section with the largest visible area as "active".
     var ratios = {};
     sections.forEach(function(s){ ratios[s.id] = 0; });
 
     var io = new IntersectionObserver(function(entries){
+      if(lockedActiveId !== null) return;
       entries.forEach(function(e){
         ratios[e.target.id] = e.isIntersecting ? e.intersectionRatio : 0;
       });
