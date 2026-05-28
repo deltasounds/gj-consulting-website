@@ -553,7 +553,7 @@
   }
   /* Editorial lead paragraph — serif statement that sits at the top of
      a prose column, ahead of standard sans body copy.
-     Matches the .ft-to-text treatment used for the "to" side of
+     Matches the .ft-to-clause treatment used for the "to" side of
      each from-to shift (semibold, opsz 28, tight tracking). */
   .prose p.lead{
     font-family: var(--font-serif);
@@ -785,7 +785,7 @@
     .shift{ padding: clamp(28px, 4vw, 40px) clamp(24px, 3.5vw, 32px); }
     .shift:nth-child(2n){ border-right: 0; }
     .shift:nth-child(-n+2){ border-bottom: 1px solid var(--rule-light); }
-    .ft-to-text{ font-size: clamp(26px, 3.6vw, 32px); }
+    .ft-to-clause{ font-size: clamp(28px, 3.6vw, 36px); }
   }
   @media (max-width: 640px){
     .shifts{ grid-template-columns: 1fr; }
@@ -1415,7 +1415,7 @@
 
   /* ---------- 4.8 Closing ---------- */
   section.closing{
-    padding: clamp(72px, 9vw, 120px) 0 clamp(96px, 12vw, 160px);
+    padding: clamp(72px, 9vw, 120px) 0 clamp(72px, 9vw, 120px);
   }
   .closing-invite{
     font-family: var(--font-serif);
