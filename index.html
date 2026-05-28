@@ -664,11 +664,6 @@
   @media (max-width: 920px){
     .thesis-block{ max-width: 100%; }
   }
-  @media (max-width: 720px){
-    .thesis{ font-size: clamp(22px, 5.6vw, 28px); line-height: 1.28; }
-    .shifts-heading{ font-size: clamp(28px, 7.2vw, 36px); line-height: 1.1; }
-  }
-
   /* Lead paragraph sitting beneath the shifts section heading,
      introducing the four shifts at standard body scale. */
   .shifts-lead{
@@ -703,42 +698,39 @@
   }
   .shift:last-child{ border-right: 0; }
   .shift-statement{
-    display: flex;
-    flex-direction: column;
-    gap: clamp(8px, 0.8vw, 12px);
+    /* single-child container — keeps the aria-label hook */
   }
-  .ft-from-text{
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-optical-sizing: auto;
-    font-variation-settings: "opsz" 24;
-    font-size: clamp(19px, 1.6vw, 23px);
-    line-height: 1.2;
-    letter-spacing: -0.012em;
-    color: var(--fg-on-light-2);
-    margin: 0;
-    text-wrap: balance;
-  }
-  .ft-arrow{
-    font-family: var(--font-serif);
-    font-weight: 400;
-    font-size: clamp(22px, 1.8vw, 26px);
-    line-height: 1;
-    color: var(--sage);
-    display: inline-block;
-    margin: clamp(2px, 0.3vw, 4px) 0;
-  }
-  .ft-to-text{
+  .ft-line{
     font-family: var(--font-serif);
     font-weight: 600;
     font-optical-sizing: auto;
-    font-variation-settings: "opsz" 32;
-    font-size: clamp(22px, 1.95vw, 30px);
-    line-height: 1.1;
-    letter-spacing: -0.02em;
+    font-variation-settings: "opsz" 20;
+    font-size: clamp(17px, 1.4vw, 21px);
+    line-height: 1.35;
+    letter-spacing: -0.008em;
     color: var(--ink);
     margin: 0;
-    text-wrap: balance;
+    text-wrap: pretty;
+  }
+  .ft-word{
+    font-weight: 400;
+    color: var(--fg-on-light-2);
+  }
+  .ft-from-clause{
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .ft-to-clause{
+    display: block;
+    margin-top: clamp(8px, 0.7vw, 12px);
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-optical-sizing: auto;
+    font-variation-settings: "opsz" 36;
+    font-size: clamp(24px, 2.4vw, 36px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--ink);
   }
   .shift-line{
     font-family: var(--font-sans);
@@ -853,8 +845,8 @@
   .work-body{
     font-family: var(--font-sans);
     font-weight: 300;
-    font-size: 16px;
-    line-height: 1.55;
+    font-size: 17px;
+    line-height: 1.65;
     color: var(--fg-on-light-1);
     max-width: var(--measure-prose);
   }
@@ -868,6 +860,8 @@
     line-height: 1.45;
     color: var(--sage-deep);
   }
+
+  br.eb-break{ display: none; }
 
   @media (max-width: 920px){
     .work-row{
@@ -974,14 +968,39 @@
     margin-top: auto;
   }
 
-  /* Canvas mobile: stack into single column */
+  /* Canvas mobile: preserve 2/4/2 shape, move band label to header row */
   @media (max-width: 920px){
-    .canvas-band.b-focus,
-    .canvas-band.b-adapt,
-    .canvas-band.b-enable{ grid-template-columns: 1fr; }
-    .band-label{ border-right: 0; border-bottom: 1px solid var(--rule-light); min-height: auto; padding: 22px 18px; }
-    .c-block{ border-right: 0; border-bottom: 1px solid var(--rule-light); min-height: auto; padding: 22px 18px; }
-    .c-block:last-child{ border-bottom: 0; }
+    .canvas-band.b-focus { grid-template-columns: repeat(2, 1fr); }
+    .canvas-band.b-adapt { grid-template-columns: repeat(4, 1fr); }
+    .canvas-band.b-enable{ grid-template-columns: repeat(2, 1fr); }
+    .band-label{
+      grid-column: 1 / -1;
+      border-right: 0;
+      border-bottom: 1px solid var(--rule-light);
+      min-height: auto;
+      padding: 12px 14px;
+      flex-direction: row;
+      align-items: baseline;
+      gap: 8px;
+    }
+    .band-label .label-name{ margin-top: 0; font-size: 11px; }
+    .c-block{ padding: 14px 12px 16px; min-height: 88px; gap: 4px; }
+    .c-block .name{ font-size: clamp(13px, 2.6vw, 18px); line-height: 1.18; letter-spacing: -0.01em; }
+  }
+  @media (max-width: 520px){
+    .c-block{ padding: 12px 10px 14px; min-height: 76px; }
+    .c-block .name{ font-size: clamp(11px, 3.2vw, 14px); line-height: 1.15; }
+    .band-label{ padding: 10px 12px; }
+    .band-label .label-name{ font-size: 10px; letter-spacing: 0.16em; }
+  }
+
+  .canvas-download--mobile{ display: none; }
+  @media (max-width: 920px){
+    .canvas-download--desktop{ display: none; }
+    .canvas-download--mobile{
+      display: inline-flex;
+      margin-top: clamp(28px, 4.5vw, 40px);
+    }
   }
 
   /* ---------- 4.5 Diagnostic grid ---------- */
@@ -1393,32 +1412,10 @@
     .portrait{ max-width: 360px; }
   }
 
-  /* Mobile: relax section heading max-widths so they don't preserve
-     desktop line-breaks at a smaller scale. Also tighten vertical rhythm
-     so stacked content doesn't feel orphaned. */
-  @media (max-width: 720px){
-    h2.cs-heading{
-      max-width: none;
-      font-size: clamp(34px, 8.6vw, 44px);
-      line-height: 1.08;
-    }
-    .closing-invite{
-      max-width: none;
-      font-size: clamp(26px, 6.8vw, 34px);
-      line-height: 1.12;
-    }
-    .hero .hero-line{
-      max-width: none;
-    }
-    .col-heading-bio{ row-gap: clamp(28px, 5vw, 36px); }
-    .bio-grid{ row-gap: clamp(36px, 6vw, 56px); }
-    .ln-link{ margin-top: clamp(20px, 3vw, 28px); }
-    .grid-2{ row-gap: clamp(20px, 4vw, 32px); }
-  }
 
   /* ---------- 4.8 Closing ---------- */
   section.closing{
-    padding: clamp(96px, 12vw, 160px) 0 clamp(120px, 14vw, 180px);
+    padding: clamp(72px, 9vw, 120px) 0 clamp(96px, 12vw, 160px);
   }
   .closing-invite{
     font-family: var(--font-serif);
@@ -1556,6 +1553,30 @@
     outline-offset: 4px;
   }
 
+  /* Mobile type bumps — consolidated block; must stay last to win
+     same-specificity cascade ties. */
+  @media (max-width: 720px){
+    .hero .hero-line{ max-width: none; font-size: clamp(44px, 11.2vw, 56px); line-height: 1.08; }
+    .hero .hero-support{ font-size: 19px; line-height: 1.55; }
+    h2.cs-heading{ max-width: none; font-size: clamp(38px, 9.2vw, 48px); line-height: 1.06; }
+    .shifts-heading{ font-size: clamp(32px, 7.8vw, 40px); line-height: 1.08; }
+    .thesis{ font-size: clamp(26px, 6.4vw, 34px); line-height: 1.26; }
+    .closing-invite{ max-width: none; font-size: clamp(38px, 9.2vw, 48px); line-height: 1.06; }
+    .prose{ font-size: 19px; line-height: 1.65; }
+    .work-body{ font-size: 19px; line-height: 1.65; }
+    .shift-line{ font-size: 18px; line-height: 1.6; }
+    .shifts-lead{ font-size: 19px; line-height: 1.6; }
+    .closing-supporting{ font-size: 19px; line-height: 1.6; }
+    .ft-line{ font-size: clamp(18px, 1.4vw, 21px); }
+    .work-meta .work-eyebrow{ font-size: 13px; }
+    .writing-card .wr-eyebrow{ font-size: 13px; }
+    br.eb-break{ display: inline; }
+    .col-heading-bio{ row-gap: clamp(28px, 5vw, 36px); }
+    .bio-grid{ row-gap: clamp(36px, 6vw, 56px); }
+    .ln-link{ margin-top: clamp(20px, 3vw, 28px); }
+    .grid-2{ row-gap: clamp(20px, 4vw, 32px); }
+  }
+
   /* Reduce motion preference */
   @media (prefers-reduced-motion: reduce){
     *{ transition: none !important; animation: none !important;}
@@ -1612,43 +1633,35 @@
 
       <div class="shifts-intro" id="shifts">
         <hr class="section-rule"/>
-        <h2 class="shifts-heading">What AI adoption requires of organizations</h2>
+        <h2 class="shifts-heading">Four shifts AI adoption requires of organizations</h2>
         <p class="shifts-lead">Most AI use right now is personal: people drafting faster, summarizing more, searching better. But changing how an organization actually runs takes work at a different level.</p>
       </div>
 
       <div class="shifts" role="list">
         <article class="shift" role="listitem">
           <div class="shift-statement" aria-label="From isolated experimentation to coordinated organizational learning">
-            <p class="ft-from-text">Isolated experimentation</p>
-            <span class="ft-arrow" aria-hidden="true">→</span>
-            <p class="ft-to-text">Coordinated organizational learning</p>
+            <p class="ft-line"><span class="ft-word" aria-hidden="true">From</span> <span class="ft-from-clause">isolated experimentation</span> <span class="ft-word" aria-hidden="true">to</span><span class="ft-to-clause">Coordinated organizational learning</span></p>
           </div>
           <p class="shift-line">Teams stop running the same experiments in parallel. What one team learns gets shared with others.</p>
         </article>
 
         <article class="shift" role="listitem">
           <div class="shift-statement" aria-label="From AI for individual productivity to workflow and operating model redesign">
-            <p class="ft-from-text">AI for individual productivity</p>
-            <span class="ft-arrow" aria-hidden="true">→</span>
-            <p class="ft-to-text">Workflow and operating model redesign</p>
+            <p class="ft-line"><span class="ft-word" aria-hidden="true">From</span> <span class="ft-from-clause">AI for individual productivity</span> <span class="ft-word" aria-hidden="true">to</span><span class="ft-to-clause">Workflow and operating model redesign</span></p>
           </div>
           <p class="shift-line">The work itself gets redesigned: who does what, where AI fits in, and how decisions get made.</p>
         </article>
 
         <article class="shift" role="listitem">
           <div class="shift-statement" aria-label="From reactive governance to adaptive operating practices">
-            <p class="ft-from-text">Reactive governance</p>
-            <span class="ft-arrow" aria-hidden="true">→</span>
-            <p class="ft-to-text">Adaptive operating practices</p>
+            <p class="ft-line"><span class="ft-word" aria-hidden="true">From</span> <span class="ft-from-clause">reactive governance</span> <span class="ft-word" aria-hidden="true">to</span><span class="ft-to-clause">Adaptive operating practices</span></p>
           </div>
           <p class="shift-line">Governance moves out of policy documents and into day-to-day decisions.</p>
         </article>
 
         <article class="shift" role="listitem">
           <div class="shift-statement" aria-label="From strategic uncertainty to aligned organizational direction">
-            <p class="ft-from-text">Strategic uncertainty</p>
-            <span class="ft-arrow" aria-hidden="true">→</span>
-            <p class="ft-to-text">Aligned organizational direction</p>
+            <p class="ft-line"><span class="ft-word" aria-hidden="true">From</span> <span class="ft-from-clause">strategic uncertainty</span> <span class="ft-word" aria-hidden="true">to</span><span class="ft-to-clause">Aligned organizational direction</span></p>
           </div>
           <p class="shift-line">Leadership priorities, governance, and the work on the ground start moving in the same direction.</p>
         </article>
@@ -1703,7 +1716,7 @@
       <div class="work-list" role="list">
         <article class="work-row" role="listitem">
           <div class="work-meta">
-            <span class="work-eyebrow">Government of Canada · Federal department</span>
+            <span class="work-eyebrow">Government of Canada · <br class="eb-break"/>Federal department</span>
             <h3 class="work-title">AI governance, evaluation, and operational oversight</h3>
           </div>
           <div class="work-body">
@@ -1714,7 +1727,7 @@
 
         <article class="work-row" role="listitem">
           <div class="work-meta">
-            <span class="work-eyebrow">Government of Prince Edward Island · Service PEI</span>
+            <span class="work-eyebrow">Government of Prince Edward Island · <br class="eb-break"/>Service PEI</span>
             <h3 class="work-title">Government service modernization and transformation planning</h3>
           </div>
           <div class="work-body">
@@ -1725,7 +1738,7 @@
 
         <article class="work-row" role="listitem">
           <div class="work-meta">
-            <span class="work-eyebrow">Government of Prince Edward Island · Health PEI</span>
+            <span class="work-eyebrow">Government of Prince Edward Island · <br class="eb-break"/>Health PEI</span>
             <h3 class="work-title">Digital governance and executive prioritization</h3>
           </div>
           <div class="work-body">
@@ -1736,7 +1749,7 @@
 
         <article class="work-row" role="listitem">
           <div class="work-meta">
-            <span class="work-eyebrow">Government of Ontario · Treasury Board Secretariat</span>
+            <span class="work-eyebrow">Government of Ontario · <br class="eb-break"/>Treasury Board Secretariat</span>
             <h3 class="work-title">Strategic advisory on AI-enabled public service transformation</h3>
           </div>
           <div class="work-body">
@@ -1759,7 +1772,7 @@
           <p>The AI Transformation Canvas is a strategic framework I developed to help leadership teams navigate the organizational side of the AI transition. It organizes the work into eight connected areas across three layers: strategy, adaptation, and enablement.</p>
           <p>Teams use it to clarify priorities, surface coordination gaps, and guide operational change over time.</p>
           <p>The Canvas is yours to download and use with your team. I'd be glad to hear how you're using it. Credit appreciated if you share or adapt it. If you'd like help applying it in your context, get in touch.</p>
-          <a href="assets/AI_Transformation_Canvas_v1.0_Greg_Judelman.pdf" target="_blank" rel="noopener" class="btn-primary-paper canvas-download" onclick="gtag('event', 'canvas_download', { file_name: 'AI_Transformation_Canvas_v1.0', link_text: 'Download the Canvas' })">Download the Canvas <span class="arr">→</span></a>
+          <a href="assets/AI_Transformation_Canvas_v1.0_Greg_Judelman.pdf" target="_blank" rel="noopener" class="btn-primary-paper canvas-download canvas-download--desktop" onclick="gtag('event', 'canvas_download', { file_name: 'AI_Transformation_Canvas_v1.0', link_text: 'Download the Canvas' })">Download the Canvas <span class="arr">→</span></a>
         </div>
       </div>
 
@@ -1811,6 +1824,7 @@
           </div>
         </div>
       </figure>
+      <a href="assets/AI_Transformation_Canvas_v1.0_Greg_Judelman.pdf" target="_blank" rel="noopener" class="btn-primary-paper canvas-download canvas-download--mobile" onclick="gtag('event', 'canvas_download', { file_name: 'AI_Transformation_Canvas_v1.0', link_text: 'Download the Canvas' })">Download the Canvas <span class="arr">→</span></a>
     </div>
   </section>
 
