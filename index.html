@@ -994,14 +994,6 @@
     .band-label .label-name{ font-size: 10px; letter-spacing: 0.16em; }
   }
 
-  .canvas-download--mobile{ display: none; }
-  @media (max-width: 920px){
-    .canvas-download--desktop{ display: none; }
-    .canvas-download--mobile{
-      display: inline-flex;
-      margin-top: clamp(28px, 4.5vw, 40px);
-    }
-  }
 
   /* ---------- 4.5 Diagnostic grid ---------- */
   .diag-figure{
@@ -1176,6 +1168,15 @@
     color: var(--color-paper);
     text-decoration: none;
     border-color: var(--ink);
+  }
+
+  .canvas-download--mobile{ display: none; }
+  @media (max-width: 920px){
+    .canvas-download--desktop{ display: none; }
+    .canvas-download--mobile{
+      display: inline-flex;
+      margin-top: clamp(28px, 4.5vw, 40px);
+    }
   }
 
   .offers-cta{
