@@ -369,6 +369,8 @@
     margin-left: calc(50% - 50vw);
     margin-right: calc(50% - 50vw);
     padding: 0;
+    position: relative;
+    overflow: hidden;
   }
   .hero{
     max-width: 1440px;
@@ -377,6 +379,7 @@
     grid-template-columns: minmax(0, 12fr);
     padding: clamp(42px, 9vw, 110px) var(--rail-x) clamp(96px, 13vw, 160px);
     position: relative;
+    z-index: 1;
   }
   .hero .hero-line{
     font-family: var(--font-serif);
@@ -487,6 +490,43 @@
   .hero-ctas .email-link:hover{
     color: var(--fg-on-dark-1);
     text-decoration-color: var(--fg-on-dark-1);
+  }
+
+  /* ---------- Aurora hero background ---------- */
+  .hero-aurora{
+    position:absolute; inset:0; z-index:0; pointer-events:none;
+    --mx:50%; --my:44%; --rx:900px; --ry:760px;
+  }
+  .hero-aurora .alh-warp{
+    position:absolute; inset:-160px;
+    will-change:opacity; pointer-events:none; overflow:hidden;
+    opacity:0.1;
+    -webkit-mask: radial-gradient(var(--rx) var(--ry) at var(--mx) var(--my),
+      #000 0%, rgba(0,0,0,0.82) 24%, rgba(0,0,0,0.42) 50%, rgba(0,0,0,0.16) 74%, rgba(0,0,0,0.05) 92%, transparent 100%);
+            mask: radial-gradient(var(--rx) var(--ry) at var(--mx) var(--my),
+      #000 0%, rgba(0,0,0,0.82) 24%, rgba(0,0,0,0.42) 50%, rgba(0,0,0,0.16) 74%, rgba(0,0,0,0.05) 92%, transparent 100%);
+  }
+  .hero-aurora .alh-spin{
+    position:absolute; top:50%; left:50%; border-radius:50%;
+    will-change:transform; pointer-events:none;
+  }
+  .hero-aurora .alh-spin-a{
+    mix-blend-mode:screen;
+    background: conic-gradient(from 0deg at 50% 50%,
+      rgb(46,150,108), rgb(34,140,152), rgb(40,118,160),
+      rgb(60,100,168), rgb(96,90,162), rgb(150,72,92),
+      rgb(70,140,110), rgb(46,150,108));
+    filter: blur(30px);
+  }
+  .hero-aurora .alh-spin-b{
+    mix-blend-mode:screen; opacity:0.4;
+    background: conic-gradient(from 90deg at 50% 50%,
+      rgb(34,140,152), rgb(60,100,168), rgb(46,150,108),
+      rgb(96,90,162), rgb(40,118,160), rgb(34,140,152));
+    filter: blur(44px);
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hero-aurora .alh-spin{ animation:none !important; }
   }
 
   /* ---------- Section frame ---------- */
@@ -1609,6 +1649,13 @@
 
   <!-- 4.1 Hero -->
   <div class="hero-wrap" id="hero">
+    <!-- Aurora background: decorative, behind all hero content -->
+    <div class="hero-aurora" aria-hidden="true">
+      <div class="alh-warp">
+        <div class="alh-spin alh-spin-a"></div>
+        <div class="alh-spin alh-spin-b"></div>
+      </div>
+    </div>
     <section class="hero" data-screen-label="01 Hero" aria-labelledby="hero-line">
       <h1 id="hero-line" class="hero-line">
         I advise leaders working through the human and organizational side of the <span class="accent">AI transition</span>.
@@ -2154,6 +2201,108 @@
       // Trigger a no-op scroll to kick the observer.
       window.dispatchEvent(new Event('scroll'));
     });
+  })();
+</script>
+
+<!-- ============================================================
+     AURORA HERO BACKGROUND ENGINE — vanilla JS, no dependencies
+     ============================================================ -->
+<script>
+  (function(){
+    var root = document.querySelector('.hero-aurora');
+    if(!root) return;
+    var warp  = root.querySelector('.alh-warp');
+    var spinA = root.querySelector('.alh-spin-a');
+    var spinB = root.querySelector('.alh-spin-b');
+    var band  = document.getElementById('hero');
+    if(!warp || !spinA || !spinB || !band) return;
+
+    var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var PAD = 160;
+    var w = band.offsetWidth, h = band.offsetHeight;
+
+    function size(){
+      w = band.offsetWidth; h = band.offsetHeight;
+      root.style.setProperty('--rx', Math.round(w*1.2)+'px');
+      root.style.setProperty('--ry', Math.round(h*1.4)+'px');
+      var d = Math.ceil(Math.hypot(w+PAD*2, h+PAD*2)) + 110;
+      spinA.style.width = spinB.style.width = d+'px';
+      spinA.style.height = spinB.style.height = d+'px';
+    }
+    size();
+    if(window.ResizeObserver){ var ro = new ResizeObserver(size); ro.observe(band); }
+    else { window.addEventListener('resize', size); }
+
+    if(prefersReduced){
+      warp.style.opacity = 0.3;
+      root.style.setProperty('--mx', (w/2 + PAD)+'px');
+      root.style.setProperty('--my', (h*0.44 + PAD)+'px');
+      spinA.style.transform = 'translate(-50%,-50%) rotate(0deg)';
+      spinB.style.transform = 'translate(-50%,-50%) rotate(40deg) scale(1.25)';
+      return;
+    }
+
+    var cur={x:w/2,y:h*0.44}, target={x:w/2,y:h*0.44}, trail={x:w/2,y:h*0.44};
+    var pointing=false, act=0, last=null, curOp=0.1, angle=0, prev=performance.now();
+    var intro=true, introT=0, INTRO_DELAY=0.55, INTRO_DUR=3.0;
+
+    function localPt(e){ var r=band.getBoundingClientRect(); return {x:e.clientX-r.left, y:e.clientY-r.top}; }
+    function onMove(e){
+      pointing=true; intro=false;
+      var p=localPt(e);
+      if(last) act=Math.min(1, act + Math.hypot(p.x-last.x, p.y-last.y)/90);
+      last=p; target.x=p.x; target.y=p.y;
+    }
+    function onLeave(){ pointing=false; last=null; }
+    band.addEventListener('pointermove', onMove);
+    band.addEventListener('pointerleave', onLeave);
+
+    var raf=0, t0=performance.now(), running=false;
+    function frame(now){
+      if(!running) return;
+      var t = (now-t0)/1000;
+      var dt = Math.min(0.05, (now-prev)/1000); prev=now;
+      if(!pointing){
+        if(intro){
+          introT += dt;
+          var pp = (introT-INTRO_DELAY)/INTRO_DUR;
+          if(pp>=1){ intro=false; }
+          else if(pp>0){
+            var ease=Math.sin(Math.PI*pp);
+            act=Math.max(act, ease*0.7);
+            target.x=w*(0.34+0.34*pp);
+            target.y=h*(0.42+0.05*Math.sin(Math.PI*pp));
+          } else { target.x=w/2; target.y=h*0.44; }
+        } else {
+          target.x=w/2 + Math.sin(t*0.2)*w*0.14;
+          target.y=h*0.44 + Math.cos(t*0.15)*h*0.11;
+        }
+      }
+      cur.x+=(target.x-cur.x)*0.2; cur.y+=(target.y-cur.y)*0.2;
+      trail.x+=(cur.x-trail.x)*0.16; trail.y+=(cur.y-trail.y)*0.16;
+      act*=0.985;
+      angle += dt*10*(1+0.35*Math.sin(t*0.3))*(1+1.5*act);
+      var opTarget = 0.1 + 0.32*act;
+      var k = opTarget>curOp ? 0.16 : 0.045;
+      curOp += (opTarget-curOp)*k;
+      warp.style.opacity = curOp.toFixed(3);
+      root.style.setProperty('--mx', (trail.x+PAD)+'px');
+      root.style.setProperty('--my', (trail.y+PAD)+'px');
+      var ox=(cur.x-w/2), oy=(cur.y-h*0.44);
+      spinA.style.transform='translate(-50%,-50%) translate('+(ox*0.18)+'px,'+(oy*0.18)+'px) rotate('+angle+'deg)';
+      spinB.style.transform='translate(-50%,-50%) translate('+(ox*0.3)+'px,'+(oy*0.3)+'px) rotate('+((-angle*0.6)+40)+'deg) scale(1.25)';
+      raf=requestAnimationFrame(frame);
+    }
+    function start(){ if(running) return; running=true; prev=performance.now(); raf=requestAnimationFrame(frame); }
+    function stop(){ running=false; cancelAnimationFrame(raf); }
+
+    var onScreen=true, tabHidden=false;
+    if(window.IntersectionObserver){
+      var io=new IntersectionObserver(function(es){ onScreen=es[0].isIntersecting; (onScreen&&!tabHidden)?start():stop(); }, {threshold:0});
+      io.observe(band);
+    }
+    document.addEventListener('visibilitychange', function(){ tabHidden=document.hidden; (onScreen&&!tabHidden)?start():stop(); });
+    start();
   })();
 </script>
 
