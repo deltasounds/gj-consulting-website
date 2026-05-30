@@ -2111,13 +2111,8 @@
         if(y < 0) y = 0;
         window.scrollTo({ top: y, behavior: behavior });
       }
-      // On cold load the variable font may not have swapped in yet, so
-      // heading metrics are fallback-font values. Waiting for fonts.ready
-      // before computing the target means we scroll once, to the right place.
-      // On subsequent clicks fonts are already loaded so this resolves
-      // synchronously (status check) with no delay.
-      if(document.fonts && document.fonts.status !== 'loaded' && document.fonts.ready){
-        document.fonts.ready.then(doScroll);
+      if(document.fonts && document.fonts.status !== 'loaded'){
+        document.fonts.ready.then(function(){ requestAnimationFrame(doScroll); });
       } else {
         doScroll();
       }
