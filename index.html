@@ -2309,6 +2309,7 @@
     var swell   = opts.swell   !== undefined ? opts.swell   : 0.32;
     var anchorY = opts.anchorY !== undefined ? opts.anchorY : 0.44;
     var doIntro = opts.intro   !== undefined ? opts.intro   : true;
+    var DECAY   = opts.decay   != null       ? opts.decay   : 0.985;
 
     var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var PAD = 160;
@@ -2373,7 +2374,7 @@
       }
       cur.x+=(target.x-cur.x)*0.2; cur.y+=(target.y-cur.y)*0.2;
       trail.x+=(cur.x-trail.x)*0.16; trail.y+=(cur.y-trail.y)*0.16;
-      act*=0.985;
+      act*=DECAY;
       angle += dt*10*(1+0.35*Math.sin(t*0.3))*(1+1.5*act);
       var opTarget = baseOp + swell*act;
       var k = opTarget>curOp ? 0.16 : 0.045;
@@ -2399,7 +2400,7 @@
   }
 
   // Hero: full intensity, intro sweep, anchor at 44%
-  initAurora(document.querySelector('.hero-aurora'), document.getElementById('hero'), {});
+  initAurora(document.querySelector('.hero-aurora'), document.getElementById('hero'), { swell:0.24, decay:0.978 });
   // Closing bookend: dimmer, no intro, anchor lower at 62%
   initAurora(document.querySelector('.closing-aurora'), document.getElementById('contact-band'), { baseOp:0.05, swell:0.16, anchorY:0.62, intro:false });
 </script>
