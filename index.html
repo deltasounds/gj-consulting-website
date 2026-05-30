@@ -2093,7 +2093,6 @@
       // a heading would.
       return section.querySelector('.cs-heading, .shifts-heading, .closing-invite, h1, h2');
     }
-    var jumpSeq = 0;
     function jumpTo(id, opts){
       if(id === 'top'){
         window.scrollTo({ top: 0, behavior: (opts && opts.behavior) || 'smooth' });
@@ -2101,21 +2100,11 @@
       }
       var section = document.getElementById(id);
       if(!section) return false;
-      var behavior = (opts && opts.behavior) || 'smooth';
-      var myseq = ++jumpSeq;
-      function doScroll(){
-        if(myseq !== jumpSeq) return;
-        var heading = findHeading(section) || section;
-        var rect = heading.getBoundingClientRect();
-        var y = (window.scrollY || window.pageYOffset || 0) + rect.top - JUMP_OFFSET_TOP;
-        if(y < 0) y = 0;
-        window.scrollTo({ top: y, behavior: behavior });
-      }
-      if(document.fonts && document.fonts.status !== 'loaded'){
-        document.fonts.ready.then(function(){ requestAnimationFrame(doScroll); });
-      } else {
-        doScroll();
-      }
+      var heading = findHeading(section) || section;
+      var rect = heading.getBoundingClientRect();
+      var y = (window.scrollY || window.pageYOffset || 0) + rect.top - JUMP_OFFSET_TOP;
+      if(y < 0) y = 0;
+      window.scrollTo({ top: y, behavior: (opts && opts.behavior) || 'smooth' });
       return true;
     }
     document.addEventListener('click', function(e){
