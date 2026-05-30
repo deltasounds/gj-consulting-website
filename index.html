@@ -431,7 +431,25 @@
     text-transform: uppercase;
     border-radius: 0;
     cursor: pointer;
-    transition: background 240ms var(--ease-standard), color 240ms var(--ease-standard);
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+    transition: color 260ms var(--ease-standard) 90ms;
+  }
+  .btn-primary::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: var(--sage);
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 460ms var(--ease-emphasized);
+    z-index:-1;
+  }
+  .btn-primary:hover::before,
+  .btn-primary:focus-visible::before{
+    transform: scaleX(1);
+    transform-origin: left center;
   }
   .btn-primary .arr{
     font-family: var(--font-serif);
@@ -441,13 +459,10 @@
     letter-spacing: 0;
     text-transform: none;
     color: var(--sage);
-    transition: color 240ms var(--ease-standard), transform 240ms var(--ease-standard);
+    transition: color 200ms var(--ease-standard) 240ms;
   }
-  .btn-primary:hover{
-    background: var(--sage);
-    color: var(--ink);
-  }
-  .btn-primary:hover .arr{color: var(--ink); transform: translateX(3px);}
+  .btn-primary:hover{ color: var(--ink); }
+  .btn-primary:hover .arr{ color: var(--ink); }
 
   /* Secondary CTA: text link */
   .link-secondary{
@@ -1179,7 +1194,25 @@
     text-transform: uppercase;
     border-radius: 0;
     cursor: pointer;
-    transition: background 240ms var(--ease-standard), color 240ms var(--ease-standard), border-color 240ms var(--ease-standard);
+    position: relative;
+    overflow: hidden;
+    z-index: 0;
+    transition: color 260ms var(--ease-standard) 90ms, border-color 260ms var(--ease-standard);
+  }
+  .btn-primary-paper::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    background: var(--ink);
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 460ms var(--ease-emphasized);
+    z-index:-1;
+  }
+  .btn-primary-paper:hover::before,
+  .btn-primary-paper:focus-visible::before{
+    transform: scaleX(1);
+    transform-origin: left center;
   }
   .btn-primary-paper .arr{
     font-family: var(--font-serif);
@@ -1189,14 +1222,13 @@
     letter-spacing: 0;
     text-transform: none;
     color: var(--sage-deep);
-    transition: color 240ms var(--ease-standard), transform 240ms var(--ease-standard);
+    transition: color 200ms var(--ease-standard) 240ms;
   }
   .btn-primary-paper:hover{
-    background: var(--ink);
     color: var(--color-paper);
     border-color: var(--ink);
   }
-  .btn-primary-paper:hover .arr{ color: var(--sage); transform: translateX(3px); }
+  .btn-primary-paper:hover .arr{ color: var(--sage); }
 
   /* Canvas download button — sits inline within prose, so it needs a
      little breathing room above to separate from the paragraph. The
