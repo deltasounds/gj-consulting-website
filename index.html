@@ -868,9 +868,12 @@
     text-transform: uppercase;
     color: var(--sage-deep);
     margin: 0 0 clamp(16px, 1.6vw, 20px);
-    line-height: 1.3;
+    line-height: 1.55;
     display: block;
   }
+  .work-meta .work-eyebrow .eb-org,
+  .work-meta .work-eyebrow .eb-unit{ display: block; }
+  .work-meta .work-eyebrow .eb-org{ text-wrap: balance; }
   .work-meta .work-title{
     font-family: var(--font-serif);
     font-weight: 600;
@@ -903,7 +906,6 @@
     color: var(--sage-deep);
   }
 
-  br.eb-break{ display: none; }
 
   @media (max-width: 920px){
     .work-row{
@@ -1613,7 +1615,7 @@
     .ft-line{ font-size: clamp(18px, 1.4vw, 21px); }
     .work-meta .work-eyebrow{ font-size: 13px; }
     .writing-card .wr-eyebrow{ font-size: 13px; }
-    br.eb-break{ display: inline; }
+    .work-meta .work-eyebrow{ letter-spacing: 0.08em; }
     .col-heading-bio{ row-gap: clamp(28px, 5vw, 36px); }
     .bio-grid{ row-gap: clamp(36px, 6vw, 56px); }
     .ln-link{ margin-top: clamp(20px, 3vw, 28px); }
@@ -1767,7 +1769,7 @@
       <div class="work-list" role="list">
         <article class="work-row" role="listitem">
           <div class="work-meta">
-            <span class="work-eyebrow">Government of Canada · <br class="eb-break"/>Federal department</span>
+            <span class="work-eyebrow"><span class="eb-org">Government of Canada</span><span class="eb-unit">Federal department</span></span>
             <h3 class="work-title">AI governance, evaluation, and operational oversight</h3>
           </div>
           <div class="work-body">
@@ -1778,7 +1780,7 @@
 
         <article class="work-row" role="listitem">
           <div class="work-meta">
-            <span class="work-eyebrow">Government of Prince Edward Island · <br class="eb-break"/>Service PEI</span>
+            <span class="work-eyebrow"><span class="eb-org">Government of Prince Edward Island</span><span class="eb-unit">Service PEI</span></span>
             <h3 class="work-title">Government service modernization and transformation planning</h3>
           </div>
           <div class="work-body">
@@ -1789,7 +1791,7 @@
 
         <article class="work-row" role="listitem">
           <div class="work-meta">
-            <span class="work-eyebrow">Government of Prince Edward Island · <br class="eb-break"/>Health PEI</span>
+            <span class="work-eyebrow"><span class="eb-org">Government of Prince Edward Island</span><span class="eb-unit">Health PEI</span></span>
             <h3 class="work-title">Digital governance and executive prioritization</h3>
           </div>
           <div class="work-body">
@@ -1800,7 +1802,7 @@
 
         <article class="work-row" role="listitem">
           <div class="work-meta">
-            <span class="work-eyebrow">Government of Ontario · <br class="eb-break"/>Treasury Board Secretariat</span>
+            <span class="work-eyebrow"><span class="eb-org">Government of Ontario</span><span class="eb-unit">Treasury Board Secretariat</span></span>
             <h3 class="work-title">Strategic advisory on AI-enabled public service transformation</h3>
           </div>
           <div class="work-body">
