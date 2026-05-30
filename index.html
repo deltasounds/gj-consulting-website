@@ -2348,8 +2348,17 @@
       last=p; target.x=p.x; target.y=p.y;
     }
     function onLeave(){ pointing=false; last=null; }
+    function onDown(e){
+      pointing=true; intro=false;
+      var p=localPt(e);
+      act=Math.min(1, act+0.5);
+      last=p; target.x=p.x; target.y=p.y;
+    }
     band.addEventListener('pointermove', onMove);
+    band.addEventListener('pointerdown', onDown);
     band.addEventListener('pointerleave', onLeave);
+    band.addEventListener('pointerup', onLeave);
+    band.addEventListener('pointercancel', onLeave);
 
     var raf=0, t0=performance.now(), running=false;
     function frame(now){
