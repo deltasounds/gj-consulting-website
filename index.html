@@ -2101,41 +2101,25 @@
       }
       var section = document.getElementById(id);
       if(!section) return false;
-      function targetY(){
+      var behavior = (opts && opts.behavior) || 'smooth';
+      var myseq = ++jumpSeq;
+      function doScroll(){
+        if(myseq !== jumpSeq) return;
         var heading = findHeading(section) || section;
         var rect = heading.getBoundingClientRect();
         var y = (window.scrollY || window.pageYOffset || 0) + rect.top - JUMP_OFFSET_TOP;
-        return y < 0 ? 0 : y;
+        if(y < 0) y = 0;
+        window.scrollTo({ top: y, behavior: behavior });
       }
-      var behavior = (opts && opts.behavior) || 'smooth';
-      var myseq = ++jumpSeq;
-      window.scrollTo({ top: targetY(), behavior: behavior });
-      // Re-assert the target after the scroll settles — fixes headings
-      // landing slightly too high on cold load when the web font swaps in
-      // mid-scroll and reflows the layout after the target was computed.
-      if(behavior === 'smooth'){
-        var cancelled = false;
-        function teardown(){
-          window.removeEventListener('wheel', onUser, true);
-          window.removeEventListener('touchstart', onUser, true);
-          window.removeEventListener('keydown', onUser, true);
-          window.removeEventListener('scrollend', onSettle);
-        }
-        function onUser(){ cancelled = true; teardown(); }
-        function correct(){
-          if(cancelled || myseq !== jumpSeq) return;
-          var y = targetY();
-          if(Math.abs((window.scrollY || 0) - y) > 3){ window.scrollTo({ top: y, behavior: 'auto' }); }
-        }
-        function onSettle(){ correct(); teardown(); }
-        window.addEventListener('wheel', onUser, true);
-        window.addEventListener('touchstart', onUser, true);
-        window.addEventListener('keydown', onUser, true);
-        if('onscrollend' in window){ window.addEventListener('scrollend', onSettle); }
-        else { setTimeout(onSettle, 1100); }
-        if(document.fonts && document.fonts.ready && document.fonts.ready.then){
-          document.fonts.ready.then(function(){ if(!cancelled && myseq === jumpSeq) requestAnimationFrame(correct); });
-        }
+      // On cold load the variable font may not have swapped in yet, so
+      // heading metrics are fallback-font values. Waiting for fonts.ready
+      // before computing the target means we scroll once, to the right place.
+      // On subsequent clicks fonts are already loaded so this resolves
+      // synchronously (status check) with no delay.
+      if(document.fonts && document.fonts.status !== 'loaded' && document.fonts.ready){
+        document.fonts.ready.then(doScroll);
+      } else {
+        doScroll();
       }
       return true;
     }
